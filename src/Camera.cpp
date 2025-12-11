@@ -1,4 +1,5 @@
 #include "../include/Camera.h"
+#include <iostream>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
@@ -40,19 +41,25 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
     if (direction == FORWARD)
     {
         Position += Front * velocity;
+        //std::cout << "W = " << velocity << std::endl;
     }
     if (direction == BACKWARD)
     {
         Position -= Front * velocity;
+        //std::cout << "S = " << velocity << std::endl;
     }
     if (direction == LEFT)
     {
         Position -= Right * velocity;
+        //std::cout << "A = " << velocity << std::endl;
     }
     if (direction == RIGHT)
     {
         Position += Right * velocity;
+        //std::cout << "D = " << velocity << std::endl;
     }
+    // to do
+    // 这里后续希望实现Q E来升降，类似于UE引擎那样
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)

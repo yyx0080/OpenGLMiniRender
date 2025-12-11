@@ -42,7 +42,7 @@ void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
     Camera* cam = reinterpret_cast<Camera*>(glfwGetWindowUserPointer(window));
     cam->ProcessMouseScroll(yoffset);
-    std::cout << "Mouse moved: xoffset=" << xoffset << ", yoffset=" << yoffset << std::endl;
+    //std::cout << "Mouse moved: xoffset=" << xoffset << ", yoffset=" << yoffset << std::endl;
 }
 
 
