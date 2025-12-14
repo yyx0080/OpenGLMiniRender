@@ -4,6 +4,7 @@
 #include <vector>
 #include "../external/glm/glm.hpp"
 #include "Shader.h" 
+#include "../include/Texture.h"
 
 // 顶点
 struct Vertex {
@@ -12,12 +13,13 @@ struct Vertex {
     glm::vec2 TexCoords; // 纹理坐标（用于贴图）
 };
 
-// 纹理
-struct Texture {
-    unsigned int id;   // OpenGL 纹理 ID
-    std::string type;  // 纹理类型：e.g., "texture_diffuse", "texture_specular"
-    std::string path;  // 纹理文件路径
-};
+//// 纹理
+//struct Texture {
+//    unsigned int id;   // OpenGL 纹理 ID
+//    std::string type;  // 纹理类型：e.g., "texture_diffuse", "texture_specular"
+//    std::string path;  // 纹理文件路径
+//};
+class Texture;
 
 class Mesh {
 public:

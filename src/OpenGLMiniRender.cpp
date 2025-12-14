@@ -5,6 +5,7 @@
 #include "../include/Camera.h"
 #include "../include/Input.h"
 #include "../include/Mesh.h"
+#include "../include/Texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -40,12 +41,12 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
+    glEnable(GL_DEPTH_TEST); // 开启深度测试，确保像素的位置覆盖关系
     // 主循环
 
     // 这里的shader可以下先用绝对路径
     Shader shader("C:/C++Code/OpenGLMiniRender/shader/vertex_shader.vs", "C:/C++Code/OpenGLMiniRender/shader/fragment_shader.fs");
-    
+    Texture diffuseMap("C:/C++Code/OpenGLMiniRender/textures/container2.png", "texture_diffuse");
     // =======================
     // 初始化 MVP 矩阵
     // =======================
@@ -145,6 +146,7 @@ int main()
     };
     std::vector<unsigned int> cubeIndices; // 空向量，因为我们用 36 个顶点直接绘制
     std::vector<Texture> cubeTextures;     // 暂无纹理
+    cubeTextures.push_back(diffuseMap);
     // 创建Mesh类
     Mesh cubeMesh(cubeVertices, cubeIndices, cubeTextures);
 
@@ -157,8 +159,7 @@ int main()
     {
         // 清屏
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Input::UpdateDeltaTime();
         Input::ProcessKeyboard(window, camera);

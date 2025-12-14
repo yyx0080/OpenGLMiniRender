@@ -70,7 +70,7 @@ void Mesh::Draw(const Shader& shader) const
     {
         glActiveTexture(GL_TEXTURE0 + i); // 激活纹理单元 i
 
-        std::string name = textures[i].type;
+        std::string name = textures[i].GetType();
         std::string number;
         if (name == "texture_diffuse")
         {
@@ -83,7 +83,7 @@ void Mesh::Draw(const Shader& shader) const
         // 设置 Shader 中的 Uniform 变量 (例如：texture_diffuse1)
         shader.setInt((name + number).c_str(), i);
 
-        glBindTexture(GL_TEXTURE_2D, textures[i].id); // 绑定纹理 ID
+        glBindTexture(GL_TEXTURE_2D, textures[i].ID); // 绑定纹理 ID
     }
 
     // 2. 绘制网格

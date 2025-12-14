@@ -84,6 +84,7 @@ target_include_directories(OpenGLMiniRender PRIVATE
     ${glad_SOURCE_DIR}/include
     ${glfw_SOURCE_DIR}/include
     external/glm        # glm 是 header-only，直接指向源码根目录即可
+    external            # 指向存放stb_image.h 的目录
 )
 
 # 如果你在 Windows 上需要链接系统 OpenGL 库
