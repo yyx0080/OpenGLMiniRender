@@ -1,3 +1,7 @@
 # 忽略 out .vs/目录
 out/
 .vs/
+
+# 忽略 Assimp 编译生成的文件和目录
+/external/assimp_lib/lib/*
+/external/assimp_lib/bin/*

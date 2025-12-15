@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+# FetchContent 将下载的源码存放在项目根目录下的 external/ 文件夹中
+set(GLAD_LOCAL_PATH "${CMAKE_SOURCE_DIR}/external/glad_source")
+set(GLFW_LOCAL_PATH "${CMAKE_SOURCE_DIR}/external/glfw_source")
+
+
 # -----------------------------
 # 可覆盖的仓库 URL（默认指向 GitHub 官方）
 # 在命令行可以用 -DGLAD_GIT_URL=... 来覆盖
@@ -56,6 +61,28 @@ FetchContent_MakeAvailable(glfw)
 # )
 # FetchContent_MakeAvailable(glm)
 
+# ---------- ASSIMP (手动配置) ----------
+# 定义库的存放路径
+set(ASSIMP_DIR ${CMAKE_SOURCE_DIR}/external/assimp_lib)
+# 明确定义导入库的完整路径（静态链接库）
+set(ASSIMP_LIBRARY_FILE "${ASSIMP_DIR}/lib/assimp-vc143-mtd.lib") # lib文件名称
+
+if(EXISTS ${ASSIMP_LIBRARY_FILE})
+    message(STATUS "Found Assimp library for linking: ${ASSIMP_LIBRARY_FILE}")
+else()
+    # 如果找不到，输出自定义的错误信息
+    message(FATAL_ERROR "Assimp import library (.lib) not found at expected path: ${ASSIMP_LIBRARY_FILE}")
+endif()
+
+set(ASSIMP_LIBRARY ${ASSIMP_LIBRARY_FILE})
+find_library(ASSIMP_LIBRARY assimp HINTS ${ASSIMP_DIR}/lib)
+
+if(ASSIMP_LIBRARY)
+    message(STATUS "Found Assimp library for linking: ${ASSIMP_LIBRARY}")
+else()
+    # 如果找不到，你需要将 .lib 文件放到 ${ASSIMP_DIR}/lib 目录下
+    message(FATAL_ERROR "Assimp import library (.lib) not found in ${ASSIMP_DIR}/lib. Please download or generate it.")
+endif()
 
 # ============================================================
 # Executable
@@ -75,6 +102,7 @@ target_link_libraries(OpenGLMiniRender
     PRIVATE
     glfw
     glad
+    ${ASSIMP_LIBRARY}  # 链接到 Assimp 的 .lib 文件
     # glm 是头文件库
 )
 
@@ -83,6 +111,7 @@ target_link_libraries(OpenGLMiniRender
 target_include_directories(OpenGLMiniRender PRIVATE
     ${glad_SOURCE_DIR}/include
     ${glfw_SOURCE_DIR}/include
+    ${ASSIMP_DIR}/include
     external/glm        # glm 是 header-only，直接指向源码根目录即可
     external            # 指向存放stb_image.h 的目录
 )
