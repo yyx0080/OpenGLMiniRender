@@ -8,7 +8,9 @@ class Texture
 {
 public:
     unsigned int ID; // OpenGL 纹理对象 ID
-
+    std::string path;
+    std::string type;
+    Texture() : ID(0) {} // 默认构造函数
     // 构造函数：加载图片文件并配置 OpenGL 纹理
     Texture(const std::string& path, const std::string& type);
 
@@ -22,11 +24,8 @@ public:
     std::string GetType() const { return type; }
 
 private:
-    std::string type; // 例如: "texture_diffuse", "texture_specular"
-
     // 内部函数：加载图片数据
     unsigned char* LoadImage(const std::string& path, int& width, int& height, int& nrComponents);
-
     // 内部函数：配置 OpenGL 纹理参数
     void setupTexture(unsigned char* data, int width, int height, int nrComponents);
 };

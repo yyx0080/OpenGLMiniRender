@@ -5,3 +5,9 @@ out/
 # 忽略 Assimp 编译生成的文件和目录
 /external/assimp_lib/lib/*
 /external/assimp_lib/bin/*
+
+# 忽略模型文件
+/models/*
+
+# 忽略模型纹理
+/textures/*

@@ -11,7 +11,7 @@ uniform mat4 model;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
     // 将顶点属性中的纹理坐标传递给输出变量
     TexCoord = aTexCoord;
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

@@ -6,6 +6,7 @@
 #include "../include/Input.h"
 #include "../include/Mesh.h"
 #include "../include/Texture.h"
+#include "../include/Model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -42,11 +43,18 @@ int main()
         return -1;
     }
     glEnable(GL_DEPTH_TEST); // 开启深度测试，确保像素的位置覆盖关系
-    // 主循环
-
     // 这里的shader可以下先用绝对路径
     Shader shader("C:/C++Code/OpenGLMiniRender/shader/vertex_shader.vs", "C:/C++Code/OpenGLMiniRender/shader/fragment_shader.fs");
-    Texture diffuseMap("C:/C++Code/OpenGLMiniRender/textures/container2.png", "texture_diffuse");
+    // 加载模型
+    const std::string modelPath = "C:/C++Code/OpenGLMiniRender/models/fazhang.obj";
+    Model ourModel(modelPath);
+    // 加载纹理
+    Texture fazhangDiffuse("C:/C++Code/OpenGLMiniRender/textures/fazhang.png", "texture_diffuse");
+    // 注入纹理
+    for (unsigned int i = 0; i < ourModel.meshes.size(); i++) 
+    {
+        ourModel.meshes[i].textures.push_back(fazhangDiffuse);
+    }
     // =======================
     // 初始化 MVP 矩阵
     // =======================
@@ -82,73 +90,8 @@ int main()
         800.0f / 600.0f,
         0.1f,
         100.0f);
-    std::vector<Vertex> cubeVertices = {
-        // ---- 后面 (Back Face, Z = -0.5) ----
-        // 法线：(0.0, 0.0, -1.0)
-        //  Pos                             | Normal                        | TexCoords
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)}, // A (底部左侧)
-        {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)}, // B (底部右侧)
-        {glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)}, // C (顶部右侧)
 
-        {glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)}, // C
-        {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)}, // D (顶部左侧)
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)}, // A
 
-        // ---- 前面 (Front Face, Z = 0.5) ----
-        // 法线：(0.0, 0.0, 1.0)
-        {glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // A'
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // C'
-        {glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // B'
-
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // C'
-        {glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // A'
-        {glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // D'
-
-        // ---- 左面 (Left Face, X = -0.5) ----
-        // 法线：(-1.0, 0.0, 0.0)
-        {glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // D'
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // A
-        {glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)}, // A'
-
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // A
-        {glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // D'
-        {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)}, // D
-
-        // ---- 右面 (Right Face, X = 0.5) ----
-        // 法线：(1.0, 0.0, 0.0)
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // C'
-        {glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)}, // B'
-        {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // B
-
-        {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // B
-        {glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f)}, // C
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // C'
-
-        // ---- 底面 (Bottom Face, Y = -0.5) ----
-        // 法线：(0.0, -1.0, 0.0)
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // A
-        {glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 0.0f)}, // A'
-        {glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // B'
-
-        {glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // B'
-        {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1.0f, 1.0f)}, // B
-        {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // A
-
-        // ---- 顶面 (Top Face, Y = 0.5) ----
-        // 法线：(0.0, 1.0, 0.0)
-        {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // D
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // C'
-        {glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)}, // D'
-
-        {glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)}, // C'
-        {glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)}, // D
-        {glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)}  // C
-    };
-    std::vector<unsigned int> cubeIndices; // 空向量，因为我们用 36 个顶点直接绘制
-    std::vector<Texture> cubeTextures;     // 暂无纹理
-    cubeTextures.push_back(diffuseMap);
-    // 创建Mesh类
-    Mesh cubeMesh(cubeVertices, cubeIndices, cubeTextures);
 
     glfwSetWindowUserPointer(window, &camera);
     // 初始化输入系统
@@ -175,7 +118,9 @@ int main()
         shader.use();
         shader.setMat4("projection", projection); // <--- 新增或移动
         shader.setMat4("view", view);             // <--- 新增或移动
-        cubeMesh.Draw(shader);
+        shader.setMat4("model", model);
+        /*cubeMesh.Draw(shader);*/
+        ourModel.Draw(shader);
 
         // 交换前后缓冲
         glfwSwapBuffers(window);

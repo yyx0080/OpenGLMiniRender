@@ -103,6 +103,7 @@ target_link_libraries(OpenGLMiniRender
     glfw
     glad
     ${ASSIMP_LIBRARY}  # 链接到 Assimp 的 .lib 文件
+    "${ASSIMP_DIR}/lib/zlibstaticd.lib"  # <--- 手动指定链接 zlib
     # glm 是头文件库
 )
 

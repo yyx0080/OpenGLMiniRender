@@ -11,6 +11,7 @@ struct Vertex {
     glm::vec3 Position;  // 顶点坐标
     glm::vec3 Normal;    // 法线向量（用于光照计算）
     glm::vec2 TexCoords; // 纹理坐标（用于贴图）
+    glm::vec3 Tangent;   // 新增：切线向量，用于法线贴图
 };
 
 //// 纹理
