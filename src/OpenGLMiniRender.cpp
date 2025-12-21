@@ -44,7 +44,7 @@ int main()
     }
     glEnable(GL_DEPTH_TEST); // 开启深度测试，确保像素的位置覆盖关系
     // 这里的shader可以下先用绝对路径
-    Shader shader("C:/C++Code/OpenGLMiniRender/shader/vertex_shader.vs", "C:/C++Code/OpenGLMiniRender/shader/fragment_shader.fs");
+    Shader shader("C:/C++Code/OpenGLMiniRender/shader/lightVS_shader.vs", "C:/C++Code/OpenGLMiniRender/shader/lightFS_shader.fs");
     // 加载模型
     const std::string modelPath = "C:/C++Code/OpenGLMiniRender/models/fazhang.obj";
     Model ourModel(modelPath);
@@ -55,9 +55,7 @@ int main()
     {
         ourModel.meshes[i].textures.push_back(fazhangDiffuse);
     }
-    // =======================
     // 初始化 MVP 矩阵
-    // =======================
     glm::mat4 modelMatrix = glm::mat4(1.0f);
 
     glm::mat4 viewMatrix = glm::lookAt(
@@ -116,10 +114,18 @@ int main()
 
 
         shader.use();
+
+        // 设置光源信息
+        // 动态光源
+        float lightX = 2.0f * sin(glfwGetTime());
+        float lightZ = 2.0f * cos(glfwGetTime());
+        shader.setVec3("lightPos", glm::vec3(lightX, 1.0f, lightZ)); // 你可以根据需要调整光源位置
+        shader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f)); // 白光
+        shader.setVec3("viewPos", camera.Position); // 传入相机位置用于计算镜面反射
+
         shader.setMat4("projection", projection); // <--- 新增或移动
         shader.setMat4("view", view);             // <--- 新增或移动
         shader.setMat4("model", model);
-        /*cubeMesh.Draw(shader);*/
         ourModel.Draw(shader);
 
         // 交换前后缓冲

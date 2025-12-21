@@ -65,9 +65,7 @@ void Model::Draw(const Shader& shader) const
     }
 }
 
-// =========================================================================
 // 加载模型 (核心方法)
-// =========================================================================
 void Model::loadModel(const std::string& path)
 {
     Assimp::Importer importer;
@@ -200,9 +198,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(vertices, indices, textures);
 }
 
-// =========================================================================
 // 加载材质纹理
-// =========================================================================
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<Texture> textures;
